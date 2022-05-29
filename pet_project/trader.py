@@ -46,6 +46,8 @@ class FinanceDiary:
         return self.amount_spent_on_buying / self.usd_balance
 
     def message_about_the_average_value(self):
+        '''Методы которые выводит среднюю стоимость валюты -> сумма в гривнах потраченная на валюту / на кол-во валюты.
+            Разбил на два метода, для того что бы в дальнейшем в методе использовать self.average_currency_val'''
         if self.amount_spent_on_buying == 0 and self.usd_balance == 0:
             print("We don't have any information of your balance")
         else:
