@@ -12,11 +12,10 @@ class FinanceDiary:
         self.usd_balance = self.account_info['USD balance']
         self.sell_usd_course = self.account_info['sell dollar course']
         self.buy_usd_course = self.account_info['buy dollar course']
-        # self.average_asset_value_usd = self.account_info["average asset value USD"]
         self.amount_spent_on_buying = self.account_info["amount spent on buying currency UA"]
 
     def read_config(self) -> dict:
-        '''Метод который заранее вычитывает заготовленный файл и создает последующий файл истории'''
+        '''Reading file with history actions'''
         if os.path.isfile(self.history_info_path) is False:
             with open(self.info_path, 'r') as file:
                 dict_with_info = json.load(file)
@@ -26,45 +25,45 @@ class FinanceDiary:
         return dict_with_info
 
     def rate_buy(self):
-        '''Метод который выводит актуальный курс, по которому банк продает валюту'''
+        '''Returns self.account_info['buy dollar course']'''
         print(f"1 USD / {self.buy_usd_course} UAH")
 
     def rate_sell(self):
-        '''Метод который выводит актуальный курс, по которому банк покупает валюту'''
+        '''Returns self.account_info['sell dollar course']'''
         print(f"1 USD / {self.sell_usd_course} UAH")
 
     def available(self):
-        '''Метод который выводит сколько у пользователя накопленно валюты'''
+        '''Returns the amount of savings in a specific currency'''
         print(f"USD account balance: {self.usd_balance}")
 
     ###################################################################################################################
     def average_currency_val(self) -> int:
-        '''Методы которые выводит среднюю стоимость валюты -> сумма в гривнах потраченная на валюту / на кол-во валюты.
-        Разбил на два метода, для того что бы в дальнейшем в методе использовать self.average_currency_val'''
+        '''Methods that display the average value of the currency ->
+        -> the amount in hryvnia spent on the currency / on the amount of the currency
+            Broken into two methods, in order to use self.average_currency_val in the method later'''
         return self.amount_spent_on_buying / self.usd_balance
 
     def message_about_the_average_value(self):
-        '''Методы которые выводит среднюю стоимость валюты -> сумма в гривнах потраченная на валюту / на кол-во валюты.
-            Разбил на два метода, для того что бы в дальнейшем в методе использовать self.average_currency_val'''
+        '''Methods that display the average value of the currency ->
+        -> the amount in hryvnia spent on the currency / on the amount of the currency
+            Broken into two methods, in order to use self.average_currency_val in the method later'''
         if self.amount_spent_on_buying == 0 and self.usd_balance == 0:
             print("We don't have any information of your balance")
         else:
             self.account_info["average asset value USD"] = self.average_currency_val()
             print(f"Your average currency USD {self.average_currency_val()}")
             return self.account_info
-
     ###################################################################################################################
 
-
     def buy(self, available: Optional[int] = 0) -> dict:
-        '''Метод с помощью которого можно добавить USD'''
+        '''Method by which you can add USD'''
         need_uah = available * self.buy_usd_course
         self.account_info['amount spent on buying currency UA'] += round(need_uah, 2)
         self.account_info['USD balance'] += round(available, 2)
         return self.account_info
 
     def sell(self, available: Optional[int] = 0) -> dict:
-        '''Метод с помощью которого можно "продать" USD'''
+        '''Method by which you can deleted USD'''
         if available > self.usd_balance:
             print(f"UNAVAILABLE, REQUIRED BALANCE USD {self.usd_balance}, AVAILABLE {available}")
         else:
@@ -75,12 +74,12 @@ class FinanceDiary:
         return self.account_info
 
     def restart(self):
-        '''Метод с помощью которого можно удалить историю и данные'''
+        '''Method by which you can delete history and data'''
         os.remove(self.history_info_path)
 
 
 def write_session_history(data):
-    '''Метод который вносит изменения в историю trader_last_session.json'''
+    '''Method that makes changes to the history file trader_last_session.json'''
     with open("trader_last_session.json", 'w') as file:
         json.dump(data, file, indent=2)
 
